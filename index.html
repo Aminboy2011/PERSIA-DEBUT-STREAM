@@ -10,154 +10,156 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+font-family:Arial,sans-serif;
 }
 
 body{
-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#000;
-overflow:hidden;
+height:100vh;
+background:linear-gradient(135deg,#000,#181200,#000);
 color:white;
+overflow:hidden;
 }
 
-body::before{
-content:"";
-position:absolute;
-width:100%;
-height:100%;
-background:
-radial-gradient(circle at center,#3b2a00 0%,#000 70%);
-z-index:-2;
+.youtube-btn{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#ff0000;
+color:#fff;
+text-decoration:none;
+padding:12px 30px;
+border-radius:50px;
+font-size:18px;
+font-weight:bold;
+box-shadow:0 0 20px rgba(255,0,0,.6);
+transition:.3s;
+z-index:1000;
 }
 
-body::after{
-content:"";
-position:absolute;
-width:100%;
-height:100%;
-background-image:
-radial-gradient(#FFD700 1px, transparent 1px);
-background-size:40px 40px;
-opacity:.15;
-z-index:-1;
+.youtube-btn:hover{
+background:#cc0000;
+transform:translateX(-50%) scale(1.08);
 }
 
 .container{
 text-align:center;
-width:90%;
-max-width:1200px;
+padding:20px;
 }
 
 h1{
-font-size:80px;
+font-size:70px;
 color:#FFD700;
-text-shadow:
-0 0 10px #FFD700,
-0 0 20px #FFD700,
-0 0 40px #ffae00;
-margin-bottom:15px;
+text-shadow:0 0 10px gold,0 0 30px gold;
+margin-bottom:10px;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{transform:scale(1);}
+to{transform:scale(1.05);}
 }
 
 .subtitle{
-color:#FFD700;
-letter-spacing:8px;
-margin-bottom:60px;
-font-size:22px;
+color:#d4af37;
+margin-bottom:40px;
+letter-spacing:4px;
+font-size:20px;
 }
 
 .timer{
 display:flex;
-justify-content:center;
-gap:20px;
 flex-wrap:wrap;
+justify-content:center;
+gap:15px;
 }
 
 .box{
-width:180px;
-padding:30px;
-border:2px solid #FFD700;
-border-radius:20px;
-background:rgba(255,215,0,.05);
-backdrop-filter:blur(8px);
-box-shadow:0 0 20px rgba(255,215,0,.3);
+background:rgba(255,215,0,.08);
+border:1px solid gold;
+border-radius:15px;
+padding:20px;
+width:120px;
+box-shadow:0 0 15px rgba(255,215,0,.3);
 }
 
-.box span{
-display:block;
-font-size:60px;
-color:#FFD700;
+.number{
+font-size:38px;
 font-weight:bold;
-text-shadow:0 0 15px gold;
+color:gold;
 }
 
-.box p{
-margin-top:15px;
-font-size:20px;
-color:#FFD700;
+.label{
+margin-top:10px;
+font-size:14px;
+color:#ddd;
 }
 
 .footer{
-margin-top:60px;
-font-size:22px;
-letter-spacing:4px;
+margin-top:35px;
 color:#FFD700;
+font-size:18px;
 }
 
-@media(max-width:700px){
-
-h1{
-font-size:50px;
+@media(max-width:600px){
+h1{font-size:45px;}
+.box{width:95px;padding:15px;}
+.number{font-size:28px;}
+.youtube-btn{
+font-size:16px;
+padding:10px 22px;
 }
-
-.box{
-width:140px;
-padding:20px;
-}
-
-.box span{
-font-size:42px;
-}
-
 }
 </style>
 </head>
+
 <body>
+
+<a class="youtube-btn"
+href="https://youtube.com/@kayuzauz?si=20NfL0krVdYFMipu"
+target="_blank">
+▶ YouTube
+</a>
 
 <div class="container">
 
 <h1>PERSIA</h1>
-
-<div class="subtitle">4 YEAR COUNTDOWN</div>
+<div class="subtitle">DEBUT COUNTDOWN</div>
 
 <div class="timer">
 
 <div class="box">
-<span id="days">0</span>
-<p>DAYS</p>
+<div id="years" class="number">0</div>
+<div class="label">YEARS</div>
 </div>
 
 <div class="box">
-<span id="hours">0</span>
-<p>HOURS</p>
+<div id="days" class="number">0</div>
+<div class="label">DAYS</div>
 </div>
 
 <div class="box">
-<span id="minutes">0</span>
-<p>MINUTES</p>
+<div id="hours" class="number">0</div>
+<div class="label">HOURS</div>
 </div>
 
 <div class="box">
-<span id="seconds">0</span>
-<p>SECONDS</p>
+<div id="minutes" class="number">0</div>
+<div class="label">MINUTES</div>
+</div>
+
+<div class="box">
+<div id="seconds" class="number">0</div>
+<div class="label">SECONDS</div>
 </div>
 
 </div>
 
 <div class="footer">
-TIME IS RUNNING...
+30 June 2030 • 18:00 (UZT)
 </div>
 
 </div>
@@ -165,28 +167,44 @@ TIME IS RUNNING...
 <script>
 const target = new Date("2030-06-30T18:00:00+05:00");
 
-function update(){
+function updateCountdown() {
+  const now = new Date();
+  let diff = target - now;
 
-const now=new Date().getTime();
-const diff=target-now;
+  if (diff <= 0) {
+    document.body.innerHTML =
+    "<h1 style='color:gold;text-align:center;'>🎉 PERSIA IS LIVE! 🎉</h1>";
+    return;
+  }
 
-const days=Math.floor(diff/(1000*60*60*24));
-const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
-const seconds=Math.floor((diff%(1000*60))/1000);
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-document.getElementById("days").innerHTML=days;
-document.getElementById("hours").innerHTML=hours;
-document.getElementById("minutes").innerHTML=minutes;
-document.getElementById("seconds").innerHTML=seconds;
+  const years = Math.floor(diff / (day * 365.25));
+  diff -= years * day * 365.25;
 
-if(diff<=0){
-document.body.innerHTML="<h1 style='color:gold'>PERSIA IS LIVE!</h1>";
+  const days = Math.floor(diff / day);
+  diff -= days * day;
+
+  const hours = Math.floor(diff / hour);
+  diff -= hours * hour;
+
+  const minutes = Math.floor(diff / minute);
+  diff -= minutes * minute;
+
+  const seconds = Math.floor(diff / second);
+
+  document.getElementById("years").textContent = years;
+  document.getElementById("days").textContent = days;
+  document.getElementById("hours").textContent = hours;
+  document.getElementById("minutes").textContent = minutes;
+  document.getElementById("seconds").textContent = seconds;
 }
-}
 
-update();
-setInterval(update,1000);
+updateCountdown();
+setInterval(updateCountdown,1000);
 </script>
 
 </body>
